@@ -5,7 +5,6 @@ import { TransactionTools } from '../../services/TransactionTools'
 
 import Client from 'App/Models/Client'
 import CheckingAccount from 'App/Models/CheckingAccount'
-import Log from 'App/Models/Log'
 
 
 export default class CheckingAccountsController {
