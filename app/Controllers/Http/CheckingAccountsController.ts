@@ -1,58 +1,12 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { OpenCheckingAccountsValidator, OpenFirstCheckingAccountsValidator } from '../../validators/CheckingAccountsValidator'
-import { ClientsValidator } from '../../validators/ClientsValidator'
-import { randomString, randomInteger } from '../../services/random'
-import { RequestContract } from '@ioc:Adonis/Core/Request'
+import { OpenCheckingAccountsTools } from 'App/services/openCheckingAccountTools'
 
-import CheckingAccount from 'App/Models/CheckingAccount'
 import Client from 'App/Models/Client'
-import Agency from 'App/Models/Agency'
-import Log from 'App/Models/Log'
 
 
 export default class CheckingAccountsController {
-    public async defineAgency(){
-        const agencies = await Agency.query().preload('checking_accounts')
-        const agency = agencies.reduce((prev, current) => (prev.checking_accounts.length < current.checking_accounts.length) ? prev : current)
-        return agency
-    }
-
-    public async saveClient(request: RequestContract){
-        const validator = new ClientsValidator()
-        await request.validate({schema: validator.schema, refs: validator.refs, 
-            messages: {
-                'cpf.regex': "Field CPF must containt only numbers",
-                'birth_date.before': "Client cannot be a minor" 
-            }})
-        const data = request.except(['password'])
-        const client = await Client.create(data)
-        this.saveClientLog(client)
-        return client
-    }
-
-    public async saveClientLog(client: Client){
-        await Log.create({
-            title: `Client ${client.name} was registered`,
-            description: `The client ${client.name} with CPF ${client.cpf} was registered in ${client.createdAt}`
-        })
-    }
-
-    public async saveCheckingAccount(request: RequestContract, client: Client, agency: Agency){
-        const checkingAccount = await CheckingAccount.create({
-            client_id: client.id,
-            agency_id: agency.id,
-            account_number: randomString(randomInteger(6, 17), '0123456789'),
-            password: request.input('password')
-        })
-        return checkingAccount
-    }
-
-    public async saveCheckingAccoungLog(checkingAccount: CheckingAccount, client: Client, agency: Agency){
-        await Log.create({
-            title: `Checking Account ${checkingAccount.id} created for ${client.name}`,
-            description: `A checking account with number ${checkingAccount.account_number} was created in agency ${agency.number}, for the client ${client.name} in ${checkingAccount.createdAt}`
-        })
-    }
+    openCheckingAccountsTools = new OpenCheckingAccountsTools()
 
     public async openCheckingAccount({ request, response }: HttpContextContract) {
         const validator = new OpenCheckingAccountsValidator()
@@ -65,9 +19,9 @@ export default class CheckingAccountsController {
         if (!client){
             return response.notFound({'message': 'Client not found'})
         }
-        const agency = await this.defineAgency()
-        const checkingAccount = await this.saveCheckingAccount(request, client, agency)
-        await this.saveCheckingAccoungLog(checkingAccount, client, agency)
+        const agency = await this.openCheckingAccountsTools.defineAgency()
+        const checkingAccount = await this.openCheckingAccountsTools.saveCheckingAccount(request, client, agency)
+        await this.openCheckingAccountsTools.saveCheckingAccoungLog(checkingAccount, client, agency)
         return response.created({'message':`Your checking account with number ${checkingAccount.account_number} was created in agency ${agency.number}, you can access it using the same password informed.`})
     }
 
@@ -77,10 +31,10 @@ export default class CheckingAccountsController {
             messages: {
                 'password.regex': "Field password must contain only only numbers, without repetition",
             }})
-        const client = await this.saveClient(request)
-        const agency = await this.defineAgency()
-        const checkingAccount = await this.saveCheckingAccount(request, client, agency)
-        await this.saveCheckingAccoungLog(checkingAccount, client, agency)
+        const client = await this.openCheckingAccountsTools.saveClient(request)
+        const agency = await this.openCheckingAccountsTools.defineAgency()
+        const checkingAccount = await this.openCheckingAccountsTools.saveCheckingAccount(request, client, agency)
+        await this.openCheckingAccountsTools.saveCheckingAccoungLog(checkingAccount, client, agency)
         return response.created({'message':`Your checking account with number ${checkingAccount.account_number} was created in agency ${agency.number}, you can access it using the same password informed.`})
     }
 }
