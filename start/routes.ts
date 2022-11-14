@@ -24,5 +24,13 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
+
 Route.post('/openCheckingAccount', 'CheckingAccountsController.openCheckingAccount')
 Route.post('/openFirstCheckingAccount', 'CheckingAccountsController.openFirstCheckingAccount')
+Route.post('/login', 'AuthController.login')
+
+
+Route.group(() => {
+  Route.get('/authenticated', 'AuthController.authenticated')
+  Route.post('/logout', 'AuthController.logout')
+}).middleware('auth:checkingAccount')
