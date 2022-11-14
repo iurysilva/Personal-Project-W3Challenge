@@ -6,7 +6,7 @@ import Client from 'App/Models/Client'
 
 
 export default class CheckingAccountsController {
-    openCheckingAccountsTools = new OpenCheckingAccountsTools()
+    tools = new OpenCheckingAccountsTools()
 
     public async openCheckingAccount({ request, response }: HttpContextContract) {
         const validator = new OpenCheckingAccountsValidator()
@@ -19,9 +19,9 @@ export default class CheckingAccountsController {
         if (!client){
             return response.notFound({'message': 'Client not found'})
         }
-        const agency = await this.openCheckingAccountsTools.defineAgency()
-        const checkingAccount = await this.openCheckingAccountsTools.saveCheckingAccount(request, client, agency)
-        await this.openCheckingAccountsTools.saveCheckingAccoungLog(checkingAccount, client, agency)
+        const agency = await this.tools.defineAgency()
+        const checkingAccount = await this.tools.saveCheckingAccount(request, client, agency)
+        await this.tools.saveCheckingAccoungLog(checkingAccount, client, agency)
         return response.created({'message':`Your checking account with number ${checkingAccount.account_number} was created in agency ${agency.number}, you can access it using the same password informed.`})
     }
 
@@ -31,10 +31,10 @@ export default class CheckingAccountsController {
             messages: {
                 'password.regex': "Field password must contain only only numbers, without repetition",
             }})
-        const client = await this.openCheckingAccountsTools.saveClient(request)
-        const agency = await this.openCheckingAccountsTools.defineAgency()
-        const checkingAccount = await this.openCheckingAccountsTools.saveCheckingAccount(request, client, agency)
-        await this.openCheckingAccountsTools.saveCheckingAccoungLog(checkingAccount, client, agency)
+        const client = await this.tools.saveClient(request)
+        const agency = await this.tools.defineAgency()
+        const checkingAccount = await this.tools.saveCheckingAccount(request, client, agency)
+        await this.tools.saveCheckingAccoungLog(checkingAccount, client, agency)
         return response.created({'message':`Your checking account with number ${checkingAccount.account_number} was created in agency ${agency.number}, you can access it using the same password informed.`})
     }
 }
