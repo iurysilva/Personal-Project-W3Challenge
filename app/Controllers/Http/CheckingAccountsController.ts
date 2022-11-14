@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { OpenCheckingAccountsValidator, OpenFirstCheckingAccountsValidator } from '../../validators/CheckingAccountsValidator'
-import { OpenCheckingAccountsTools } from 'App/services/openCheckingAccountTools'
+import { OpenCheckingAccountsValidator, OpenFirstCheckingAccountsValidator, WithdrawValidator, DepositValidator } from '../../validators/CheckingAccountsValidator'
+import { OpenCheckingAccountsTools } from 'App/services/OpenCheckingAccountTools'
+import { AuthenticationTools } from 'App/services/authenticationTools'
 
 import Client from 'App/Models/Client'
 import CheckingAccount from 'App/Models/CheckingAccount'
@@ -8,6 +9,7 @@ import CheckingAccount from 'App/Models/CheckingAccount'
 
 export default class CheckingAccountsController {
     tools = new OpenCheckingAccountsTools()
+    authTools = new AuthenticationTools()
 
     public async openCheckingAccount({ request, response }: HttpContextContract) {
         const validator = new OpenCheckingAccountsValidator()
@@ -43,6 +45,28 @@ export default class CheckingAccountsController {
         if (auth.use().user instanceof CheckingAccount){
             const checkingAccount = await CheckingAccount.findOrFail(auth.user?.$getAttribute('id'))
             response.send({'message':checkingAccount.balance})
+        }
+    }
+
+    public async  withdraw( {request, response, auth} ){
+        if (auth.use().user instanceof CheckingAccount){
+            const checkingAccount = await CheckingAccount.findOrFail(auth.user?.$getAttribute('id'))
+            const validator = new WithdrawValidator()
+            const payload = await request.validate({schema: validator.defineSchema(checkingAccount.balance)})
+            checkingAccount.balance -= payload.value
+            await checkingAccount.save()
+            response.send({'message':`Withdraw completed, your new balance is ${checkingAccount.balance}`})
+        }
+    }
+
+    public async  deposit( {request, response, auth} ){
+        if (auth.use().user instanceof CheckingAccount){
+            const checkingAccount = await CheckingAccount.findOrFail(auth.user?.$getAttribute('id'))
+            const validator = new DepositValidator()
+            const payload = await request.validate({schema: validator.schema})
+            checkingAccount.balance += payload.value
+            await checkingAccount.save()
+            response.send({'message':`Deposit completed, your new balance is ${checkingAccount.balance}`})
         }
     }
 }

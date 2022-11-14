@@ -27,3 +27,19 @@ export class OpenFirstCheckingAccountsValidator {
         ]),
     })
 }
+
+export class WithdrawValidator { 
+    public defineSchema(balance: number){
+        return schema.create({
+            value: schema.number([
+                 rules.range(0, balance),
+             ]),
+         })
+    }
+}
+
+export class DepositValidator { 
+    public schema = schema.create({
+       value: schema.number(),
+    })
+}
