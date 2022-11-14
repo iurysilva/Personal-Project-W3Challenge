@@ -16,6 +16,8 @@ export default class CheckingAccount extends BaseModel {
   public account_number: string
   @column({serializeAs:null})
   public password: string
+  @column()
+  public balance: number
 
   @belongsTo(() => Client, {
     foreignKey: 'client_id',
