@@ -9,9 +9,10 @@ export default class Client extends BaseModel {
   @column()
   public email: string
   @column()
-  public nome: string
-  @column()
-  public birth_date: Date
+  public name: string
+  @column.date({
+    serialize: (value) => value.toFormat('yyyy/mm/dd')})
+  public birth_date: DateTime
   @column()
   public cpf: string
 

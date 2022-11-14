@@ -34,9 +34,9 @@ export default class CheckingAccount extends BaseModel {
   public updatedAt: DateTime
 
   @beforeSave()
-  public static async hashPassword(checking_account: CheckingAccount) {
-    if (checking_account.$dirty.senha) {
-      checking_account.password = await Hash.make(checking_account.password)
+  public static async hashPassword(checkingAccount: CheckingAccount) {
+    if (checkingAccount.$dirty.password) {
+      checkingAccount.password = await Hash.make(checkingAccount.password)
     }
   }
 }
