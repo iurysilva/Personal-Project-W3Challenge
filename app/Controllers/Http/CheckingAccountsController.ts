@@ -3,6 +3,7 @@ import { OpenCheckingAccountsValidator, OpenFirstCheckingAccountsValidator } fro
 import { OpenCheckingAccountsTools } from 'App/services/openCheckingAccountTools'
 
 import Client from 'App/Models/Client'
+import CheckingAccount from 'App/Models/CheckingAccount'
 
 
 export default class CheckingAccountsController {
@@ -36,5 +37,12 @@ export default class CheckingAccountsController {
         const checkingAccount = await this.tools.saveCheckingAccount(request, client, agency)
         await this.tools.saveCheckingAccoungLog(checkingAccount, client, agency)
         return response.created({'message':`Your checking account with number ${checkingAccount.account_number} was created in agency ${agency.number}, you can access it using the same password informed.`})
+    }
+
+    public async consultBalance({ response, auth }) {
+        if (auth.use().user instanceof CheckingAccount){
+            const checkingAccount = await CheckingAccount.findOrFail(auth.user?.$getAttribute('id'))
+            response.send({'message':checkingAccount.balance})
+        }
     }
 }

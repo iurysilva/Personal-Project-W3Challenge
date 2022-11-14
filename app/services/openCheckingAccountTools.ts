@@ -38,7 +38,8 @@ export class OpenCheckingAccountsTools{
             client_id: client.id,
             agency_id: agency.id,
             account_number: randomString(randomInteger(6, 17), '0123456789'),
-            password: request.input('password')
+            password: request.input('password'),
+            balance: 0
         })
         return checkingAccount
     }

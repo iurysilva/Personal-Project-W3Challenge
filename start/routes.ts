@@ -33,4 +33,6 @@ Route.post('/login', 'AuthController.login')
 Route.group(() => {
   Route.get('/authenticated', 'AuthController.authenticated')
   Route.post('/logout', 'AuthController.logout')
+
+  Route.get('/consultBalance', 'CheckingAccountsController.consultBalance')
 }).middleware('auth:checkingAccount')
