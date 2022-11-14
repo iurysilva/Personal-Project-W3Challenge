@@ -31,7 +31,15 @@ export default class CheckingAccountsController {
             }})
         const data = request.except(['password'])
         const client = await Client.create(data)
+        this.saveClientLog(client)
         return client
+    }
+
+    public async saveClientLog(client: Client){
+        await Log.create({
+            title: `Client ${client.name} was registered`,
+            description: `The client ${client.name} with CPF ${client.cpf} was registered in ${client.createdAt}`
+        })
     }
 
     public async saveCheckingAccount(request: RequestContract, client: Client, agency: Agency){
