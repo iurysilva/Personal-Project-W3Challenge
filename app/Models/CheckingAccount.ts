@@ -13,7 +13,7 @@ export default class CheckingAccount extends BaseModel {
   public agency_id: number
 
   @column()
-  public number: string
+  public account_number: string
   @column({serializeAs:null})
   public password: string
 

@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { CheckingAccountsValidator } from '../../validators/CheckingAccountsValidator'
+import { OpenCheckingAccountsValidator, OpenFirstCheckingAccountsValidator } from '../../validators/CheckingAccountsValidator'
 import { ClientsValidator } from '../../validators/ClientsValidator'
 import { randomString, randomInteger } from '../../services/random'
 import { RequestContract } from '@ioc:Adonis/Core/Request'
@@ -18,11 +18,6 @@ export default class CheckingAccountsController {
     }
 
     public async saveClient(request: RequestContract){
-        const checkExistance = await Client.findBy('email', request.input('email'))
-        if (checkExistance){
-            return checkExistance
-        }
-
         const validator = new ClientsValidator()
         await request.validate({schema: validator.schema, refs: validator.refs, 
             messages: {
@@ -46,7 +41,7 @@ export default class CheckingAccountsController {
         const checkingAccount = await CheckingAccount.create({
             client_id: client.id,
             agency_id: agency.id,
-            number: randomString(randomInteger(6, 17), '0123456789'),
+            account_number: randomString(randomInteger(6, 17), '0123456789'),
             password: request.input('password')
         })
         return checkingAccount
@@ -55,12 +50,29 @@ export default class CheckingAccountsController {
     public async saveCheckingAccoungLog(checkingAccount: CheckingAccount, client: Client, agency: Agency){
         await Log.create({
             title: `Checking Account ${checkingAccount.id} created for ${client.name}`,
-            description: `A checking account with number ${checkingAccount.number} was created in agency ${agency.number}, for the client ${client.name} in ${checkingAccount.createdAt}`
+            description: `A checking account with number ${checkingAccount.account_number} was created in agency ${agency.number}, for the client ${client.name} in ${checkingAccount.createdAt}`
         })
     }
 
     public async openCheckingAccount({ request, response }: HttpContextContract) {
-        const validator = new CheckingAccountsValidator()
+        const validator = new OpenCheckingAccountsValidator()
+        await request.validate({schema: validator.schema, 
+            messages: {
+                'cpf.regex': "Field CPF must containt only numbers",
+                'password.regex': "Field password must contain only only numbers, without repetition",
+            }})
+        const client = await Client.findBy("cpf", request.input('cpf'))
+        if (!client){
+            return response.notFound({'message': 'Client not found'})
+        }
+        const agency = await this.defineAgency()
+        const checkingAccount = await this.saveCheckingAccount(request, client, agency)
+        await this.saveCheckingAccoungLog(checkingAccount, client, agency)
+        return response.created({'message':`Your checking account with number ${checkingAccount.account_number} was created in agency ${agency.number}, you can access it using the same password informed.`})
+    }
+
+    public async openFirstCheckingAccount({ request, response }: HttpContextContract) {
+        const validator = new OpenFirstCheckingAccountsValidator()
         await request.validate({schema: validator.schema, 
             messages: {
                 'password.regex': "Field password must contain only only numbers, without repetition",
@@ -69,6 +81,6 @@ export default class CheckingAccountsController {
         const agency = await this.defineAgency()
         const checkingAccount = await this.saveCheckingAccount(request, client, agency)
         await this.saveCheckingAccoungLog(checkingAccount, client, agency)
-        return response.created(`Your checking account with number ${checkingAccount.number} was created in agency ${agency.number}, you can access it using the same password informed.`)
+        return response.created({'message':`Your checking account with number ${checkingAccount.account_number} was created in agency ${agency.number}, you can access it using the same password informed.`})
     }
 }

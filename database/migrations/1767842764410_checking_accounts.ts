@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.integer('client_id').unsigned().references('clients.id').onDelete('CASCADE')
       table.integer('agency_id').unsigned().references('agencies.id').onDelete('CASCADE')
 
-      table.string('number', 17)
+      table.string('account_number', 17)
       table.string('password', 255)
 
       /**

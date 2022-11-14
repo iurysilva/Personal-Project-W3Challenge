@@ -25,3 +25,4 @@ Route.get('/', async () => {
 })
 
 Route.post('/openCheckingAccount', 'CheckingAccountsController.openCheckingAccount')
+Route.post('/openFirstCheckingAccount', 'CheckingAccountsController.openFirstCheckingAccount')
