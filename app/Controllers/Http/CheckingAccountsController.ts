@@ -53,7 +53,10 @@ export default class CheckingAccountsController {
             const checkingAccount = await CheckingAccount.findOrFail(auth.user?.$getAttribute('id'))
             await checkingAccount.load('client')
             const validator = new WithdrawValidator()
-            const payload = await request.validate({schema: validator.defineSchema(checkingAccount.balance)})
+            const payload = await request.validate({schema: validator.defineSchema(checkingAccount.balance), 
+                messages: {
+                    'value.range': 'Insufficient balance'
+                }})
             checkingAccount.balance -= payload.value
             await checkingAccount.save()
             await this.transactionTools.withdrawLog(checkingAccount, payload)
