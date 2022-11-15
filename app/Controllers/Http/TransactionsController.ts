@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { WithdrawValidator, DepositValidator, GiftCardValidator, TransferenceValidator } from '../../validators/TransactionsValidator'
+import { WithdrawValidator, DepositValidator, GiftCardValidator, TransferenceValidator } from '../../validators/transactionsValidator'
 import CheckingAccount from 'App/Models/CheckingAccount'
 import { TransactionTools } from '../../services/TransactionTools'
 import GiftCard from 'App/Models/GiftCard'
