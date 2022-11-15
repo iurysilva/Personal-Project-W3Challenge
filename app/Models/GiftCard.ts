@@ -11,8 +11,6 @@ export default class GiftCard extends BaseModel {
   @column()
   public name: string
   @column()
-  public value: number
-  @column()
   public company: string
 
   @belongsTo(() => GiftCardType, {

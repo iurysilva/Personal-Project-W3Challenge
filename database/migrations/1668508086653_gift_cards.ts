@@ -8,8 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.integer('gift_card_type_id').unsigned().references('gift_card_types.id').onDelete('CASCADE')
 
-      table.string('name, 50')
-      table.double('value')
+      table.string('name', 50)
       table.string('company')
 
       /**
