@@ -18,7 +18,7 @@ export default class TransactionsController {
                 }})
             checkingAccount.balance -= payload.value
             await checkingAccount.save()
-            await this.transactionTools.withdrawLog(checkingAccount, payload)
+            await this.transactionTools.generateWithdrawTransaction(checkingAccount, request.input('value'))
             response.send({'message':`Withdraw completed, your new balance is ${checkingAccount.balance}`})
         }
     }
@@ -31,7 +31,7 @@ export default class TransactionsController {
             const payload = await request.validate({schema: validator.schema})
             checkingAccount.balance += payload.value
             await checkingAccount.save()
-            await this.transactionTools.depositLog(checkingAccount, payload)
+            await this.transactionTools.generateDepositTransaction(checkingAccount, request.input('value'))
             response.send({'message':`Deposit completed, your new balance is ${checkingAccount.balance}`})
         }
     }

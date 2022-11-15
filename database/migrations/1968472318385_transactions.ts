@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.integer('checking_account_id').unsigned().references('checking_accounts.id').onDelete('CASCADE')
 
 
-      table.double('value')
+      table.string('value', 100)
       table.enu('type', ['withdraw', 'deposit', 'payment done', 'payment received'])
 
       /**

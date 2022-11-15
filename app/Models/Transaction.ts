@@ -12,7 +12,7 @@ export default class Transaction extends BaseModel {
   @column()
   public type: "withdraw" | "deposit" | "payment done" | "payment received"
   @column()
-  public value: number
+  public value: string
 
   @belongsTo(() => CheckingAccount, {
     foreignKey: 'checking_account_id',
