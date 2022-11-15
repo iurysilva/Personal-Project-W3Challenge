@@ -19,7 +19,7 @@ services:
     depends_on:
       - postgres
     ports:
-      - "5052:80"
+      - "5051:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: root@w3Challenge.com
       PGADMIN_DEFAULT_PASSWORD: root
