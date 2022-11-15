@@ -29,6 +29,8 @@ Route.post('/openCheckingAccount', 'CheckingAccountsController.openCheckingAccou
 Route.post('/openFirstCheckingAccount', 'CheckingAccountsController.openFirstCheckingAccount')
 Route.post('/login', 'AuthController.login')
 
+Route.get('/logs', 'LogsController.index')
+
 
 Route.group(() => {
   Route.get('/authenticated', 'AuthController.authenticated')
