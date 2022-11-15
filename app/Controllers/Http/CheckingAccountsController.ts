@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { OpenCheckingAccountsValidator, OpenFirstCheckingAccountsValidator, getTransactionsValidator } from '../../validators/CheckingAccountsValidator'
+import { OpenCheckingAccountsValidator, OpenFirstCheckingAccountsValidator, getTransactionsValidator } from '../../validators/checkingAccountsValidator'
 import { OpenCheckingAccountsTools } from 'App/services/OpenCheckingAccountTools'
 
 import Client from 'App/Models/Client'
