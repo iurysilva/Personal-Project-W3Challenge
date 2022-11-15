@@ -43,3 +43,15 @@ export class DepositValidator {
        value: schema.number(),
     })
 }
+
+export class getTransactionsValidator{
+    public schema = schema.create({
+        initial_date: schema.date({
+            format: 'yyyy-mm-dd'
+        }),
+        final_date: schema.date({
+            format: 'yyyy-mm-dd'}, [
+                rules.afterOrEqualToField('initial_date')
+            ])
+    })
+}

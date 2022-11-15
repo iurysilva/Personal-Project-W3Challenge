@@ -13,6 +13,8 @@ export default class Transaction extends BaseModel {
   public type: "withdraw" | "deposit" | "payment done" | "payment received"
   @column()
   public value: string
+  @column.date({ serialize: (value) => value.toFormat('dd/MM/yyyy') })
+  public date: DateTime
 
   @belongsTo(() => CheckingAccount, {
     foreignKey: 'checking_account_id',

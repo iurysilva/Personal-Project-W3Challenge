@@ -11,6 +11,7 @@ export default class extends BaseSchema {
 
       table.string('value', 100)
       table.enu('type', ['withdraw', 'deposit', 'payment done', 'payment received'])
+      table.date('date')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

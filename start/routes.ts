@@ -35,6 +35,8 @@ Route.group(() => {
   Route.post('/logout', 'AuthController.logout')
 
   Route.get('/consultBalance', 'CheckingAccountsController.consultBalance')
+  Route.post('/transactions', 'CheckingAccountsController.getTransactions')
+
   Route.post('/withdraw', 'TransactionsController.withdraw')
   Route.post('/deposit', 'TransactionsController.deposit')
 }).middleware('auth:checkingAccount')
