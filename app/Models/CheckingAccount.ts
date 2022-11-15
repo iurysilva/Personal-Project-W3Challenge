@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, beforeSave, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, beforeSave, belongsTo, BelongsTo, hasMany, HasMany} from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Agency from './Agency'
 import Client from './Client'
+import Transaction from './Transaction'
 
 export default class CheckingAccount extends BaseModel {
   @column({ isPrimary: true })
@@ -16,6 +17,13 @@ export default class CheckingAccount extends BaseModel {
   public account_number: string
   @column({serializeAs:null})
   public password: string
+  @column()
+  public balance: number
+
+  @hasMany(() => Transaction, {
+    foreignKey: 'checking_account_id',
+  })
+  public transactions: HasMany<typeof Transaction>
 
   @belongsTo(() => Client, {
     foreignKey: 'client_id',

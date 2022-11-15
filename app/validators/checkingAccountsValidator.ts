@@ -27,3 +27,31 @@ export class OpenFirstCheckingAccountsValidator {
         ]),
     })
 }
+
+export class WithdrawValidator { 
+    public defineSchema(balance: number){
+        return schema.create({
+            value: schema.number([
+                 rules.range(0, balance),
+             ]),
+         })
+    }
+}
+
+export class DepositValidator { 
+    public schema = schema.create({
+       value: schema.number(),
+    })
+}
+
+export class getTransactionsValidator{
+    public schema = schema.create({
+        initial_date: schema.date({
+            format: 'yyyy-mm-dd'
+        }),
+        final_date: schema.date({
+            format: 'yyyy-mm-dd'}, [
+                rules.afterOrEqualToField('initial_date')
+            ])
+    })
+}

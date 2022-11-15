@@ -1,17 +1,17 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'checking_accounts'
+  protected tableName = 'transactions'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('client_id').unsigned().references('clients.id').onDelete('CASCADE')
-      table.integer('agency_id').unsigned().references('agencies.id').onDelete('CASCADE')
+      table.integer('checking_account_id').unsigned().references('checking_accounts.id').onDelete('CASCADE')
 
-      table.string('account_number', 17)
-      table.double('balance')
-      table.string('password', 255)
+
+      table.string('value', 100)
+      table.enu('type', ['withdraw', 'deposit', 'payment done', 'payment received'])
+      table.date('date')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
@@ -22,6 +22,7 @@ export default class extends BaseSchema {
   }
 
   public async down () {
+    this.schema.raw('DROP TYPE IF EXISTS "request_type"')
     this.schema.dropTable(this.tableName)
   }
 }
