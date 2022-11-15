@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: w3Challenge
       POSTGRES_DB_NAME: w3Challenge
     ports:
-      - 5433:5433
+      - 5432:5432
 
   pgadmin:
     image: dpage/pgadmin4
