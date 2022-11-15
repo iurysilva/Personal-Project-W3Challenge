@@ -41,4 +41,5 @@ Route.group(() => {
 
   Route.post('/withdraw', 'TransactionsController.withdraw')
   Route.post('/deposit', 'TransactionsController.deposit')
+  Route.get('/giftCardTypes', 'GiftCardTypesController.index')
 }).middleware('auth:checkingAccount')
