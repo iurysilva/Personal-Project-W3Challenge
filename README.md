@@ -1,81 +1,80 @@
-# Adonis.js-API
+# W3ChallengeAPI
+A Rest API made with Adonis.js for the W3 backend challenge, in wich a banking automation system will be implemented.
 
-<!---Esses são exemplos. Veja https://shields.io para outras pessoas ou para personalizar este conjunto de escudos. Você pode querer incluir dependências, status do projeto e informações de licença aqui--->
+## 💻 Requirements
 
+Before starting, make sure you've attended these requirements:
+* You've installed the newest version of Docker.
+* You've installed the newest version of Docker Compose.
+* You've installed the newest version of Node.js (Minimum version required for Adonis 5: Node.js 14).
 
-## 💻 Pré-requisitos
+## 🚀 Installing
+Firstly, you need to create an .env file using the .env.example located in the project's root, to update project configurations like database environment variables.
 
-Antes de começar, verifique se você atendeu aos seguintes requisitos:
-* Você instalou a versão mais recente do Docker.
-* Você instalou a versão mais recente do Docker Compose.
-* Você instalou a versão mais recente do Node.js (Versão mínima permitida: Node.js 14).
-
-## 🚀 Instalando
-Primeiramente, crie um arquivo .env a partir do exemplo que está no diretório raiz, para atualizar as configurações do projeto, e de banco de dados:
 ```
 cp .env.example .env
 ```
 
-Para garantir:
+Then, use this to install project dependencies:
 ```
 npm install
 ```
 
-Para que seja possível executar o projeto, é necessário instalar o CLI do Adonis.js no seu sistema:
+To run the project, you need Adonis.js CLI in your system
 
 ```
 npm i --global @adonisjs/cli
 ```
 
-Para utilizar os serviços de banco de dados do Adonis.js, é necessário instalar o lucid:
+To use database services, Lucid is necessary
 ```
 npm i @adonisjs/lucid
 ```
 
-Por fim, para criar as imagens no docker referentes a este projeto, basta executar o seguinte comando na raiz:
+Finally, to create the docker images, you can use this command in the project's root
 ```
 docker compose up
 ```
-Ao final da criação das imagens, aperte CTRL+C para finalizar os containers, também é possível utilizar o comando:
+By the end of the images creation, hit CTRL+C to finalize the containers, you can also use:
 ```
 docker compose stop
 ```
 
 
-## ☕ Usando a API
+## ☕ Using the API
 
-Tenha em mente que ao rodar a API através do docker, não há hot-reload (A aplicação não atualiza em tempo real quando o código é modificado). Então, ao desenvolver, é mais atraende rodar a aplicação fora do container Docker usando o comando:
+Have in mind that if you run the API through docker, there'll be no hot-reload (Application will not update in real time as the code in modified).So, while developing, it is more attractive to run the application outside the Docker container, with the command:
 ```
 node ace serve --watch
 ```
-E executar apenas o banco de dados e o pgadmin no Docker, a conexão da aplicação com esse banco já está configurada no arquivo ".env"
+And then, you can run only the database and pgadmin through Docker, the connection betweeen the application and the database is already configured in the ".env.example" file.
 
 ```
 docker compose up postgres pgadmin -d
 ```
 
-Agora, em relação a migrations:
-- Para criar migrations:
+Now, about migrations:
+- To create migrations:
 ```
-node ace make:migration <nome da tabela>
+node ace make:migration <table name>
 ```
-- Para povoar o banco com as tabelas contidas nas migrations:
+- To populate the database with tables defined in the migrations:
 ```
 node ace migration:run
 ```
 
-## 🐘 Usando pgadmin para visualizar os dados
-Primeiro, execute a API e acesse a porta:
+## 🐘 Using PGAdmin to visualize data
+Firstly, run the project and access the address:
 ```
 localhost:5052
 ```
-Após isso, siga os seguintes passos:
-- Faça login no pgadmin usando as credenciais presentes no arquivo "docker compose.yml".
-- Clique com o botão direito em "servers" e selecione a opção de registrar um novo servidor.
-- Na aba "General", apenas nomeie o servidor como desejar.
-- Na aba "Connection", preencha os campos, "Host name/address", "Username", e "Password" com as informações contidas no arquivo "docker compose.yml". 
-- Clique em "Save".
+After that, you can follow those steps:
+- Authenticate in pgadmin using the credentials contained in the "docke compose.yml" file.
+- Right click in "servers", and select the "register" --> "server" option.
+- In the "General" tab, just name the server as you like.
+- In the "Connection" tab, you've to fill the "Host name/address", "Username" and "Password" fields with the informations contained in the "docker compose.yml" file. 
+- Click in "Save".
 
-Ao fim dessas etapas, será possível visualizar o banco, você poderá visualizar as tabelas em "Schemas", se houverem. Além disso, é possível fazer queries PostgreSQL usando a ferramenta QuerieTool.
+By the end of this proccess, you should be able to visualize the database. Its tables can be found in "Schemas", if they exist. Also, it is possible to make PostgreSQL queries using the QuerieTool functionality.
 
-[⬆ Voltar ao topo](#Adonis.js-API)
+[⬆ Back to top](#Adonis.js-API)
