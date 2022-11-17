@@ -51,6 +51,8 @@ export default class AuthController{
     public async authenticated({ auth, response }: HttpContextContract){
         if (auth.use().user instanceof CheckingAccount){
             const checkingAccount = await CheckingAccount.findOrFail(auth.user?.$getAttribute('id'))
+            await checkingAccount.load('client')
+            await checkingAccount.load('agency')
             response.send(checkingAccount)
         }
     }
